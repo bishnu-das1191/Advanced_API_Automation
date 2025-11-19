@@ -3,11 +3,13 @@ package com.api.tests;
 import static io.restassured.RestAssured.*;
 
 import com.api.pojo.UserCredentials;
+import static com.api.utils.ConfigManager.*;
 import io.restassured.http.ContentType;
 import io.restassured.module.jsv.JsonSchemaValidator;
-import io.restassured.specification.RequestSpecification;
 import static org.hamcrest.Matchers.*;
 import org.testng.annotations.Test;
+
+import java.io.IOException;
 
 public class LoginAPITest {
     // Rest Assured test code for login API would go here
@@ -19,7 +21,7 @@ public class LoginAPITest {
 
         //setup
         given()
-                .baseUri("http://64.227.160.186:9000/v1")
+                .baseUri(getProperty("BASE_URI")) // ConfigManagerOLD.getProperty("BASE_URI")
                 .and()
                 .contentType(ContentType.JSON)
                 .and()
