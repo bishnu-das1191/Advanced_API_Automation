@@ -16,6 +16,22 @@
     <maven.compiler.target>21</maven.compiler.target>
   </properties>
 
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <version>3.5.4</version>
+        <configuration>
+          <suiteXmlFiles>
+            <!--suppress UnresolvedMavenProperty -->     // from terminal will use below command to trigger specific suite
+            <suiteXmlFile>${suiteXmlFile}</suiteXmlFile> // mvn test -DsuiteXmlFile=testng.xml -Denv=qa
+          </suiteXmlFiles>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+
   <dependencies>
     <!-- https://mvnrepository.com/artifact/io.rest-assured/rest-assured -->
     <dependency>

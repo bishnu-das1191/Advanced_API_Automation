@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<suite name="Advanced API Tests">
+    <test name="In WarrantyFlow Test 1">
+        <classes>
+            <class name="com.api.tests.LoginAPITest"/>
+            <class name="com.api.tests.UserDetailsAPITest"/>
+            <class name="com.api.tests.CountAPITest"/>
+            <class name="com.api.tests.MasterAPITest"/>
+        </classes>
+    </test>
+</suite>
