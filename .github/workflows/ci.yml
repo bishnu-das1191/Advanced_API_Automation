@@ -5,6 +5,16 @@ on:
     branches: [ "main" ]
   pull_request:
     branches: [ "main" ]
+  schedule: # set the CRON for MID NIGHT . In github its UTC, so ocnvert to IST
+    - cron: "30 18 * * *" # MM HH MO DATE DAY # execute every midnight
+  workflow_dispatch:
+    inputs:
+     env:
+      description: "Environment"
+      type: choice
+      options: [qa,uat,dev]
+      default: qa
+      required: true
 
 jobs:
   test:
@@ -20,7 +30,7 @@ jobs:
         distribution: 'temurin'
         cache: maven
     - name: Execute Test Automation Framework
-      run: mvn clean test -DsuiteXmlFile=testng.xml -Denv=qa
+      run: mvn clean test -DsuiteXmlFile=testng.xml -Denv="${{ github.event.inputs.env }}"
 
     - name: Upload a Build Artifact
       if: always()
