@@ -1,4 +1,4 @@
-package com.api.pojo;
+package com.api.request.model;
 
 // record class to represent Customer details
 //records are immutable data carriers that automatically provide implementations for methods like equals(), hashCode(), and toString()

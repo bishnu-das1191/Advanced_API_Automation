@@ -2,16 +2,12 @@ package com.api.tests;
 
 import static io.restassured.RestAssured.*;
 
-import com.api.pojo.UserCredentials;
-import static com.api.utils.ConfigManager.*;
+import com.api.request.model.UserCredentials;
 
 import com.api.utils.SpecUtil;
-import io.restassured.http.ContentType;
 import io.restassured.module.jsv.JsonSchemaValidator;
 import static org.hamcrest.Matchers.*;
 import org.testng.annotations.Test;
-
-import java.io.IOException;
 
 public class LoginAPITest {
     // Rest Assured test code for login API would go here

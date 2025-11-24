@@ -1,10 +1,7 @@
 package com.api.tests;
 
-import com.api.constant.Role;
 
 import static com.api.constant.Role.FD;
-import static com.api.utils.AuthTokenProvider.*;
-import static com.api.utils.ConfigManager.*;
 import static io.restassured.module.jsv.JsonSchemaValidator.*;
 
 import com.api.utils.SpecUtil;

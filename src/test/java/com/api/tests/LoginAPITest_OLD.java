@@ -1,6 +1,6 @@
 package com.api.tests;
 
-import com.api.pojo.UserCredentials;
+import com.api.request.model.UserCredentials;
 import io.restassured.http.ContentType;
 import io.restassured.module.jsv.JsonSchemaValidator;
 import org.testng.annotations.Test;

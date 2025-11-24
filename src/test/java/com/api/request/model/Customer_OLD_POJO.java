@@ -1,4 +1,4 @@
-package com.api.pojo;
+package com.api.request.model;
 
 public class Customer_OLD_POJO {
     private String first_name;

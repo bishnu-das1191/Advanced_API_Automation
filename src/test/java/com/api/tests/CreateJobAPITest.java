@@ -1,6 +1,8 @@
 package com.api.tests;
 
-import com.api.pojo.*;
+import com.api.request.model.*;
+import com.api.request.model.CustomerAddress;
+import com.api.utils.DateTimeUtil;
 import com.api.utils.SpecUtil;
 import io.restassured.module.jsv.JsonSchemaValidator;
 import org.testng.annotations.Test;
@@ -9,6 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.api.constant.Role.FD;
+import static com.api.utils.DateTimeUtil.getTimeWithDaysAgo;
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.startsWith;
@@ -19,7 +22,6 @@ public class CreateJobAPITest {
     public void createJobAPITest() {
 
         // Data Setup
-
         Customer customer = new Customer("Bishnu", "Das", "1234567890", "", "somit.gate@gmail.com", "");
 
         // this is how we get email id from record class
@@ -32,11 +34,11 @@ public class CreateJobAPITest {
         );
 
         CustomerProduct customerProduct = new CustomerProduct(
-                "2025-04-03T18:30:00.000Z",
-                "5224598687484620",
-                "5224598687484620",
-                "5224598687484620",
-                "2025-04-03T18:30:00.000Z",
+                getTimeWithDaysAgo(10),
+                "5234598687484620",
+                "5234598687484620",
+                "5234598687484620",
+                getTimeWithDaysAgo(10),
                 1,
                 1
         );
