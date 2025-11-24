@@ -1,50 +1,60 @@
 package com.api.tests;
 
-import com.api.constant.Role;
 import com.api.pojo.*;
-import com.api.utils.AuthTokenProvider;
-import com.api.utils.ConfigManager;
 import com.api.utils.SpecUtil;
-import io.restassured.http.ContentType;
+import io.restassured.module.jsv.JsonSchemaValidator;
 import org.testng.annotations.Test;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static com.api.constant.Role.FD;
-import static com.api.utils.AuthTokenProvider.getToken;
 import static io.restassured.RestAssured.given;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.startsWith;
 
 public class CreateJobAPITest {
 
-
-    Customer customer = new Customer("Bishnu", "Das", "1234567890", "", "somit.gate@gmail.com", "");
-    CustomerAddress customerAddress = new CustomerAddress(
-            "flat no 123","apartment name","street name",
-            "near landmark","area name","412101",
-            "India","Maharashtra"
-    );
-
-    CustomerProduct customerProduct = new CustomerProduct(
-            "2025-04-03T18:30:00.000Z",
-            "4004598687484620",
-            "4004598687484620",
-            "4004598687484620",
-            "2025-04-03T18:30:00.000Z",
-            1,
-            1
-    );
-
-    Problems problem1 = new Problems(1, "battery issue");
-    Problems[] problems = {problem1};
-
-    CreateJobPayload createJobPayload = new CreateJobPayload(
-            0,2,1,1,
-            customer,customerAddress,customerProduct,problems);
-
-
-
-
-
     @Test
     public void createJobAPITest() {
+
+        // Data Setup
+
+        Customer customer = new Customer("Bishnu", "Das", "1234567890", "", "somit.gate@gmail.com", "");
+
+        // this is how we get email id from record class
+        System.out.println(customer.email_id());
+
+        CustomerAddress customerAddress = new CustomerAddress(
+                "flat no 123","apartment name","street name",
+                "near landmark","area name","412101",
+                "India","Maharashtra"
+        );
+
+        CustomerProduct customerProduct = new CustomerProduct(
+                "2025-04-03T18:30:00.000Z",
+                "5224598687484620",
+                "5224598687484620",
+                "5224598687484620",
+                "2025-04-03T18:30:00.000Z",
+                1,
+                1
+        );
+
+        Problems problem1 = new Problems(1, "battery issue");
+        List<Problems> problemsList = new ArrayList<>();
+        problemsList.add(problem1);
+
+        CreateJobPayload createJobPayload = new CreateJobPayload(
+                0,2,1,1,
+                customer,customerAddress,customerProduct, problemsList);
+
+
+
+
+
+
+
         // Implementation for creating a job via API
 
         given()
@@ -97,7 +107,11 @@ public class CreateJobAPITest {
                 .when()
                 .post("/job/create")
                 .then()
-                .spec(SpecUtil.responseSpec_OK());
+                .spec(SpecUtil.responseSpec_OK())
+                .body(JsonSchemaValidator.matchesJsonSchemaInClasspath("response-schema/CreateJobAPIResponseSchema.json"))
+                .body("message", equalTo("Job created successfully. "))
+                .body("data.mst_service_location_id", equalTo(1))
+                .body("data.job_number", startsWith("JOB_"));
 
 
     }
