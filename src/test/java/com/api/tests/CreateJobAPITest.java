@@ -1,5 +1,6 @@
 package com.api.tests;
 
+import com.api.constant.*;
 import com.api.request.model.*;
 import com.api.request.model.CustomerAddress;
 import com.api.utils.DateTimeUtil;
@@ -35,20 +36,20 @@ public class CreateJobAPITest {
 
         CustomerProduct customerProduct = new CustomerProduct(
                 getTimeWithDaysAgo(10),
-                "5234598687484620",
-                "5234598687484620",
-                "5234598687484620",
+                "5334598687484620",
+                "5334598687484620",
+                "5334598687484620",
                 getTimeWithDaysAgo(10),
-                1,
-                1
+                Product.NEXUS_2.getCode(),
+                Model.NEXUS_2_BLUE.getCode()
         );
 
-        Problems problem1 = new Problems(1, "battery issue");
+        Problems problem1 = new Problems(Problem.SMARTPHONE_IS_RUNNING_SLOW.getCode(), "battery issue");
         List<Problems> problemsList = new ArrayList<>();
         problemsList.add(problem1);
 
         CreateJobPayload createJobPayload = new CreateJobPayload(
-                0,2,1,1,
+                ServiceLocation.SERVICE_LOCATION_A.getCode(), Platform.FRONT_DESK.getCode(), Warranty_Status.IN_WARRANTY.getCode(), OEM.GOOGLE.getCode(),
                 customer,customerAddress,customerProduct, problemsList);
 
 
