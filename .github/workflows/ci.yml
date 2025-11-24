@@ -7,6 +7,7 @@ on:
     branches: [ "main" ]
   schedule: # set the CRON for MID NIGHT . In github its UTC, so ocnvert to IST
     - cron: "30 18 * * *" # MM HH MO DATE DAY # execute every midnight
+    - cron: "30 17 * * *"
   workflow_dispatch:
     inputs:
      env:
