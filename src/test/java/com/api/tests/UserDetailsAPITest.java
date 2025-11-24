@@ -3,7 +3,7 @@ package com.api.tests;
 import static io.restassured.RestAssured.*;
 import static com.api.constant.Role.*;
 
-import com.api.utils.SpecUtil;
+import static com.api.utils.SpecUtil.*;
 import io.restassured.module.jsv.JsonSchemaValidator;
 import org.testng.annotations.Test;
 import java.io.IOException;
@@ -11,12 +11,12 @@ import static org.hamcrest.Matchers.lessThan;
 
 public class UserDetailsAPITest {
 
-    @Test
+    @Test(description = "Verify if the userdetails api response is shown correctly", groups = {"api","smoke","regression"})
     public void userDetailsAPITest() throws IOException {
         // Placeholder for user details API test implementation
 
         given()
-                .spec(SpecUtil.requestSpecWithAuth(FD))
+                .spec(requestSpecWithAuth(FD))
                 .when()
                 .get("userdetails")
                 .then()

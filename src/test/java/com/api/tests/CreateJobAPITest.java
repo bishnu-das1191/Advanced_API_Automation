@@ -6,6 +6,7 @@ import com.api.request.model.CustomerAddress;
 import com.api.utils.DateTimeUtil;
 import com.api.utils.SpecUtil;
 import io.restassured.module.jsv.JsonSchemaValidator;
+import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import java.util.ArrayList;
@@ -19,9 +20,11 @@ import static org.hamcrest.Matchers.startsWith;
 
 public class CreateJobAPITest {
 
-    @Test
-    public void createJobAPITest() {
+    private CreateJobPayload createJobPayload;
 
+    @BeforeMethod(description = "Creating createJob api request payload.")
+    public void setup(){
+        // Any setup code if needed
         // Data Setup
         Customer customer = new Customer("Bishnu", "Das", "1234567890", "", "somit.gate@gmail.com", "");
 
@@ -36,9 +39,9 @@ public class CreateJobAPITest {
 
         CustomerProduct customerProduct = new CustomerProduct(
                 getTimeWithDaysAgo(10),
-                "5334598687484620",
-                "5334598687484620",
-                "5334598687484620",
+                "5344598687484620",
+                "5344598687484620",
+                "5344598687484620",
                 getTimeWithDaysAgo(10),
                 Product.NEXUS_2.getCode(),
                 Model.NEXUS_2_BLUE.getCode()
@@ -48,15 +51,14 @@ public class CreateJobAPITest {
         List<Problems> problemsList = new ArrayList<>();
         problemsList.add(problem1);
 
-        CreateJobPayload createJobPayload = new CreateJobPayload(
+        createJobPayload = new CreateJobPayload(
                 ServiceLocation.SERVICE_LOCATION_A.getCode(), Platform.FRONT_DESK.getCode(), Warranty_Status.IN_WARRANTY.getCode(), OEM.GOOGLE.getCode(),
                 customer,customerAddress,customerProduct, problemsList);
+    }
 
 
-
-
-
-
+    @Test(description = "Verify Create Job API Inwarranty Flow is working and response schema is valid", groups = {"api","regression","smoke"})
+    public void createJobAPITest() {
 
         // Implementation for creating a job via API
 
