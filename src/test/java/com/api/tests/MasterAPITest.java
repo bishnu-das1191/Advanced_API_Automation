@@ -1,12 +1,10 @@
 package com.api.tests;
 
-import com.api.constant.Role;
+import com.api.utils.SpecUtil;
 import io.restassured.module.jsv.JsonSchemaValidator;
-import org.hamcrest.Matchers;
 import org.testng.annotations.Test;
 
-import static com.api.utils.AuthTokenProvider.getToken;
-import static com.api.utils.ConfigManager.getProperty;
+import static com.api.constant.Role.FD;
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.*;
 
@@ -16,19 +14,11 @@ public class MasterAPITest {
     public void masterAPITest() {
         // Sample test method
         given()
-                .baseUri(getProperty("BASE_URI"))
-                .and()
-                .header("Authorization", getToken(Role.FD))
-                .contentType("") // in post api we need to set content type and restassured by defaults adds it.
-                .log().uri()
-                .log().method()
-                .log().headers()
+                .spec(SpecUtil.requestSpecWithAuth(FD))
                 .when()
                 .post("/master") // in this application developer by mistake created post api instead of get api for /master endpoint
                 .then()
-                .log().all()
-                .statusCode(200)
-                .time(lessThan(1000L))
+                .spec(SpecUtil.responseSpec_OK())
                 .body("message", equalTo("Success"))
                 .body("data", notNullValue())
                 .body("data",hasKey("mst_oem")) // verifying mst_oem key inside data
@@ -47,18 +37,10 @@ public class MasterAPITest {
     @Test
     public void masterAPITestWithInvalidToken() {
         given()
-                .baseUri(getProperty("BASE_URI"))
-                .and()
-                .header("Authorization","")
-                .and()
-                .contentType("") // in post api we need to set content type and restassured by defaults adds it.
-                .log().uri()
-                .log().method()
-                .log().headers()
+                .spec(SpecUtil.requestSpec())
                 .when()
                 .post("master") // using GET instead of POST as per the api design
                 .then()
-                .log().all()
-                .statusCode(401); // expecting unauthorized error
+                .spec(SpecUtil.responseSpec_TEXT(401)); // expecting unauthorized error
     }
 }

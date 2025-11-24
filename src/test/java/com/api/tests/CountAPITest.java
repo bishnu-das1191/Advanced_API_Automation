@@ -1,9 +1,13 @@
 package com.api.tests;
 
 import com.api.constant.Role;
+
+import static com.api.constant.Role.FD;
 import static com.api.utils.AuthTokenProvider.*;
 import static com.api.utils.ConfigManager.*;
 import static io.restassured.module.jsv.JsonSchemaValidator.*;
+
+import com.api.utils.SpecUtil;
 import org.testng.annotations.Test;
 
 import static io.restassured.RestAssured.*;
@@ -15,17 +19,11 @@ public class CountAPITest {
     public void verifyCountAPIResponse() {
         // Test implementation goes here
         given()
-                .baseUri(getProperty("BASE_URI"))
-                .and()
-                .header("Authorization", getToken(Role.FD))
-                .log().uri()
-                .log().method()
-                .log().headers()
+                .spec(SpecUtil.requestSpecWithAuth(FD))
                 .when()
                 .get("/dashboard/count")
                 .then()
-                .log().all()
-                .statusCode(200)
+                .spec(SpecUtil.responseSpec_OK())
                 .body("message", equalTo("Success"))
                 .time(lessThan(3000L))
                 .body("data", notNullValue())
@@ -39,14 +37,10 @@ public class CountAPITest {
     @Test
     public void countAPITestWithMissingAuthToken() {
         given()
-                .baseUri(getProperty("BASE_URI"))
-                .log().uri()
-                .log().method()
-                .log().headers()
+                .spec(SpecUtil.requestSpec())
                 .when()
                 .get("/dashboard/count")
                 .then()
-                .log().all()
-                .statusCode(401);
+                .spec(SpecUtil.responseSpec_TEXT(401));
     }
 }
