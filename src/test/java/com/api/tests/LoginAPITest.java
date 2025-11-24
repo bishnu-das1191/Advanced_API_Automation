@@ -4,6 +4,8 @@ import static io.restassured.RestAssured.*;
 
 import com.api.pojo.UserCredentials;
 import static com.api.utils.ConfigManager.*;
+
+import com.api.utils.SpecUtil;
 import io.restassured.http.ContentType;
 import io.restassured.module.jsv.JsonSchemaValidator;
 import static org.hamcrest.Matchers.*;
@@ -21,33 +23,17 @@ public class LoginAPITest {
 
         //setup
         given()
-                .baseUri(getProperty("BASE_URI")) // ConfigManagerOLD.getProperty("BASE_URI")
-                .and()
-                .contentType(ContentType.JSON)
-                .and()
-                .accept(ContentType.JSON)
-                .and()
-                .body(userCredentials)
-                .log().uri()
-                .log().method()
-                .log().headers()
-                .log().body()
+                .spec(SpecUtil.requestSpec(userCredentials))
                 // action
                 .when()
-                .post("login")
+                    .post("login")
                 .then()
-                .log().all()
-                .statusCode(200)
-                .time(lessThan(2000L))
+                    .spec(SpecUtil.responseSpec_OK())
                 //validation
                 .and()
-                .body("message", equalTo("Success"))
+                    .body("message", equalTo("Success"))
                 .and()
-                .body(JsonSchemaValidator.matchesJsonSchemaInClasspath("response-schema/LoginResponseSchema.json"));
-
-
-
-
+                    .body(JsonSchemaValidator.matchesJsonSchemaInClasspath("response-schema/LoginResponseSchema.json"));
     }
 
 }
