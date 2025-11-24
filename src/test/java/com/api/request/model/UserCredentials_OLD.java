@@ -1,11 +1,11 @@
-package com.api.pojo;
+package com.api.request.model;
 
-public class UserCredentials {
+public class UserCredentials_OLD {
 
     private String username;
     private String password;
 
-    public UserCredentials(String username, String password) {
+    public UserCredentials_OLD(String username, String password) {
         this.username = username;
         this.password = password;
     }

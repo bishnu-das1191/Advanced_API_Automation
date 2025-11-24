@@ -1,7 +1,6 @@
 package com.api.utils;
 
 import com.api.constant.Role;
-import com.api.pojo.UserCredentials;
 import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.builder.ResponseSpecBuilder;
 import io.restassured.filter.log.LogDetail;
@@ -92,6 +91,23 @@ public class SpecUtil {
                 .setContentType(ContentType.JSON)
                 .setAccept(ContentType.JSON)
                 .addHeader("Authorization", AuthTokenProvider.getToken(role))
+                .log(LogDetail.URI)
+                .log(LogDetail.METHOD)
+                .log(LogDetail.HEADERS)
+                .log(LogDetail.BODY)
+                .build();
+        return requestSpecification;
+    }
+
+
+    // RequestSpecification with Authorization Header and Body
+    public static RequestSpecification requestSpecWithAuth(Role role, Object payload){
+        RequestSpecification requestSpecification = new RequestSpecBuilder()
+                .setBaseUri(getProperty("BASE_URI"))
+                .setContentType(ContentType.JSON)
+                .setAccept(ContentType.JSON)
+                .addHeader("Authorization", AuthTokenProvider.getToken(role))
+                .setBody(payload)
                 .log(LogDetail.URI)
                 .log(LogDetail.METHOD)
                 .log(LogDetail.HEADERS)

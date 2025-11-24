@@ -1,13 +1,10 @@
 package com.api.tests;
 
-import com.api.constant.Role;
 
 import static com.api.constant.Role.FD;
-import static com.api.utils.AuthTokenProvider.*;
-import static com.api.utils.ConfigManager.*;
 import static io.restassured.module.jsv.JsonSchemaValidator.*;
 
-import com.api.utils.SpecUtil;
+import static com.api.utils.SpecUtil.*;
 import org.testng.annotations.Test;
 
 import static io.restassured.RestAssured.*;
@@ -15,15 +12,15 @@ import static org.hamcrest.Matchers.*;
 
 public class CountAPITest {
 
-    @Test
+    @Test(description = "Verify Count API is working and response schema is valid", groups = {"api","regression","smoke"})
     public void verifyCountAPIResponse() {
         // Test implementation goes here
         given()
-                .spec(SpecUtil.requestSpecWithAuth(FD))
+                .spec(requestSpecWithAuth(FD))
                 .when()
                 .get("/dashboard/count")
                 .then()
-                .spec(SpecUtil.responseSpec_OK())
+                .spec(responseSpec_OK())
                 .body("message", equalTo("Success"))
                 .time(lessThan(3000L))
                 .body("data", notNullValue())
@@ -34,13 +31,13 @@ public class CountAPITest {
                 .body(matchesJsonSchemaInClasspath("response-schema/CountAPIResponseSchema_FD.json"));
     }
 
-    @Test
+    @Test(description = "Verify Count API returns 401 Unauthorized for missing auth token", groups = {"api","regression", "negative","smoke"})
     public void countAPITestWithMissingAuthToken() {
         given()
-                .spec(SpecUtil.requestSpec())
+                .spec(requestSpec())
                 .when()
                 .get("/dashboard/count")
                 .then()
-                .spec(SpecUtil.responseSpec_TEXT(401));
+                .spec(responseSpec_TEXT(401));
     }
 }

@@ -1,14 +1,13 @@
 package com.api.tests;
 
-import com.api.pojo.UserCredentials;
+import com.api.request.model.UserCredentials;
 import io.restassured.http.ContentType;
 import io.restassured.module.jsv.JsonSchemaValidator;
 import org.testng.annotations.Test;
 
 import static com.api.utils.ConfigManager.getProperty;
 import static io.restassured.RestAssured.given;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.lessThan;
+import static org.hamcrest.Matchers.*;
 
 public class LoginAPITest_OLD {
     // Rest Assured test code for login API would go here

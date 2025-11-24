@@ -1,0 +1,35 @@
+package com.api.request.model;
+
+public class Problems_OLD_POJO {
+    private int id;
+    private String remark;
+
+    public Problems_OLD_POJO(int id, String remark) {
+        this.id = id;
+        this.remark = remark;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getRemark() {
+        return remark;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark;
+    }
+
+    @Override
+    public String toString() {
+        return "Problems{" +
+                "id=" + id +
+                ", remark='" + remark + '\'' +
+                '}';
+    }
+}
