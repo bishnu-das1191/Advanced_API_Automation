@@ -27,7 +27,7 @@ public class CSVReaderUtil {
     }
 
 
-    public static Iterator<UserBean> loadCSV(String pathOfCSVFile){
+    public static <T> Iterator<T> loadCSV(String pathOfCSVFile, Class<T> bean) {
 
         InputStream inputStream = Thread.currentThread().getContextClassLoader()
                 .getResourceAsStream(pathOfCSVFile);
@@ -35,15 +35,15 @@ public class CSVReaderUtil {
         CSVReader csvReader = new CSVReader(fileReader);
 
         // code to Map the CSV to POJO
-        CsvToBean<UserBean> csvToBean = new CsvToBeanBuilder(csvReader)
-                .withType(UserBean.class)
+        CsvToBean<T> csvToBean = new CsvToBeanBuilder(csvReader)
+                .withType(bean)
                 .withIgnoreEmptyLine(true)
                 .build();
 
-        List<UserBean> userList = csvToBean.parse();
-        System.out.println(userList); // print the list of POJOs
-        System.out.println(userList.get(0).getUsername()); // print username of first POJO
+        List<T> list = csvToBean.parse();
+        //System.out.println(userList); // print the list of POJOs
+       // System.out.println(userList.get(0).getUsername()); // print username of first POJO
 
-        return userList.iterator();
+        return list.iterator();
     }
 }
