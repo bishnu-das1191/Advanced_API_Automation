@@ -7,6 +7,7 @@ import com.opencsv.bean.CsvToBeanBuilder;
 
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.Iterator;
 import java.util.List;
 
 public class CSVReaderUtil {
@@ -26,7 +27,7 @@ public class CSVReaderUtil {
     }
 
 
-    public static void loadCSV(String pathOfCSVFile){
+    public static Iterator<UserBean> loadCSV(String pathOfCSVFile){
 
         InputStream inputStream = Thread.currentThread().getContextClassLoader()
                 .getResourceAsStream(pathOfCSVFile);
@@ -43,7 +44,6 @@ public class CSVReaderUtil {
         System.out.println(userList); // print the list of POJOs
         System.out.println(userList.get(0).getUsername()); // print username of first POJO
 
-
+        return userList.iterator();
     }
-
 }
