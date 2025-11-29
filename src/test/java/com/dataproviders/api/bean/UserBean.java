@@ -1,16 +1,16 @@
-package com.demo.csv;
+package com.dataproviders.api.bean;
 
-public class UserPOJO {
+public class UserBean {
 
     //if we are changing the column names in CSV file then
     // we need to use @CsvBindByName annotation to map the column names to the fields
     private String username;
     private String password;
 
-    public UserPOJO() {
+    public UserBean() {
     }
 
-    public UserPOJO(String username, String password) {
+    public UserBean(String username, String password) {
         this.username = username;
         this.password = password;
     }
@@ -33,7 +33,7 @@ public class UserPOJO {
 
     @Override
     public String toString() {
-        return "UserPOJO{" +
+        return "UserBean{" +
                 "username='" + username + '\'' +
                 ", password='" + password + '\'' +
                 '}';
