@@ -19,6 +19,12 @@ public class FakerDataGenerator {
     private final static int PRODUCT_ID = 1;
     private final static int MST_MODEL_ID = 1;
 
+    private final static int validProblemIds[] = {
+            1,2,3,4,5,6,7,8,9,10,
+            11,12,15,16,17,
+            19,20,22,24,26,27,28,29
+    };
+
 
 
 
@@ -69,12 +75,15 @@ public class FakerDataGenerator {
 
         // Because in app id is from 1 to 27
         // we need to generate random number between 1 to 27 and pass to Problem id
-        int problemId = RANDOM.nextInt(26) + 1; // generates a number between 1 and 27
+        //int problemId = RANDOM.nextInt(26) + 1;
         // +1 to shift range from 0-26 to 1-27
         // For example, if random.nextInt(26) gives 0, adding 1 makes it 1. Because app problem ids start from 1.
         // If it gives 26, adding 1 makes it 27.
 
-        Problems problems = new Problems(problemId, fakeRemark);
+        int randomProblemIdIndex = RANDOM.nextInt(validProblemIds.length); // get the number from problem ids array length
+        // because in app, there are specific problem ids are valid, so we are picking random index from that array
+
+        Problems problems = new Problems(validProblemIds[randomProblemIdIndex], fakeRemark);
         System.out.println(problems);
 
         List<Problems> problemsList = new ArrayList<>();
