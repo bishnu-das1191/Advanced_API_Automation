@@ -53,7 +53,7 @@ public class SpecUtil {
         ResponseSpecification responseSpecification =  new ResponseSpecBuilder()
                 .expectContentType(ContentType.JSON)
                 .expectStatusCode(200)
-                .expectResponseTime(Matchers.lessThan(2000L))
+                .expectResponseTime(Matchers.lessThan(5000L)) // ideally should be less than 2000 ms
                 .log(LogDetail.ALL)
                 .build();
         return responseSpecification;

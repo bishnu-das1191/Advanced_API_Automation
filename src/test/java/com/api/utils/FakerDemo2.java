@@ -52,11 +52,14 @@ public class FakerDemo2 {
 
         // Problems can be added similarly
         String fakeRemark = faker.lorem().sentence(5);
+
         // Because in app id is from 1 to 27
         // we need to generate random number between 1 to 27 and pass to Problem id
         Random random = new Random();
         int problemId = random.nextInt(26) + 1; // generates a number between 1 and 27
         // +1 to shift range from 0-26 to 1-27
+        // For example, if random.nextInt(26) gives 0, adding 1 makes it 1. Because app problem ids start from 1.
+        // If it gives 26, adding 1 makes it 27.
 
         Problems problems = new Problems(problemId, fakeRemark);
         System.out.println(problems);
