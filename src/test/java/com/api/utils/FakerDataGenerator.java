@@ -70,24 +70,32 @@ public class FakerDataGenerator {
 
     private static List<Problems> generateFakeProblemsList() {
 
-        // Problems can be added similarly
-        String fakeRemark = faker.lorem().sentence(5);
+        // adding multiple problems in List for each job
+        // generate random number from 1 to 3 and add that many problems
+        int numberOfProblems = RANDOM.nextInt(3) + 1; // generates 1,2,3
 
-        // Because in app id is from 1 to 27
-        // we need to generate random number between 1 to 27 and pass to Problem id
+        int randomProblemIdIndex;
+        String fakeRemark;
+        Problems problems;
+        List<Problems> problemsList = new ArrayList<>();
+
+        for(int i=1; i<=numberOfProblems; i++) {
+
+            // Generating random index to pick problem id from valid problem ids array
+            randomProblemIdIndex = RANDOM.nextInt(validProblemIds.length); // get the number from problem ids array length
+            // because in app, there are specific problem ids are valid, so we are picking random index from that array
+            fakeRemark = faker.lorem().sentence(5);
+            problems = new Problems(validProblemIds[randomProblemIdIndex], fakeRemark);
+            problemsList.add(problems);
+        }
+
+
+        // if we need to generate random number between 1 to 27
         //int problemId = RANDOM.nextInt(26) + 1;
         // +1 to shift range from 0-26 to 1-27
         // For example, if random.nextInt(26) gives 0, adding 1 makes it 1. Because app problem ids start from 1.
         // If it gives 26, adding 1 makes it 27.
 
-        int randomProblemIdIndex = RANDOM.nextInt(validProblemIds.length); // get the number from problem ids array length
-        // because in app, there are specific problem ids are valid, so we are picking random index from that array
-
-        Problems problems = new Problems(validProblemIds[randomProblemIdIndex], fakeRemark);
-        System.out.println(problems);
-
-        List<Problems> problemsList = new ArrayList<>();
-        problemsList.add(problems);
         return problemsList;
     }
 
