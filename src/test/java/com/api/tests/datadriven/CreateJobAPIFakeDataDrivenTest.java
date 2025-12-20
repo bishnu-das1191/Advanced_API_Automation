@@ -12,9 +12,11 @@ import static org.hamcrest.Matchers.startsWith;
 
 public class CreateJobAPIFakeDataDrivenTest {
 
+    // to execute only faker data driven test case from maven command line filtering with group
+    //mvn test -Denv=qa -DsuiteXmlFile=testng-datadriven.xml -Dgroups=faker
 
     @Test(description = "Verify Create Job API Inwarranty Flow is working and response schema is valid",
-            groups = {"api","regression","datadriven"},
+            groups = {"api","regression","datadriven","faker"},
             dataProviderClass = com.dataproviders.DataProviderUtils.class,
             dataProvider = "CreateJobAPIFakerDataProvider")
     public void createJobAPIWithFakeDataTest(CreateJobPayload createJobPayload) {

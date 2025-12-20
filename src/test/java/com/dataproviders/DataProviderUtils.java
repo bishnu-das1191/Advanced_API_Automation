@@ -47,8 +47,14 @@ public class DataProviderUtils {
 
     @DataProvider(name = "CreateJobAPIFakerDataProvider", parallel = true)
     public static Iterator<CreateJobPayload> createJobFakerDataProvider() {
+        // Read faker count from system property during runtime
+        // mvn test -Denv=qa -DsuiteXmlFile=testng-datadriven.xml -Dgroups=faker -DfakerCount=100
+        String fakerCount = System.getProperty("fakerCount", "5"); // default to 5 if not provided during runtime
+        int fakerCountInt = Integer.parseInt(fakerCount);
+
+        // Generate faker data based on fakerCountInt
         Iterator<CreateJobPayload> payloadIterator = FakerDataGenerator
-                .generateFakeCreateJobData(10);
+                .generateFakeCreateJobData(fakerCountInt);
         return payloadIterator;
     }
 

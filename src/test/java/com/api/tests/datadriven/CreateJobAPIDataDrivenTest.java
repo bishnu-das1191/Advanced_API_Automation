@@ -24,7 +24,7 @@ public class CreateJobAPIDataDrivenTest {
 
 
     @Test(description = "Verify Create Job API Inwarranty Flow is working and response schema is valid",
-            groups = {"api","regression","datadriven"},
+            groups = {"api","regression","datadriven", "csv"},
             dataProviderClass = com.dataproviders.DataProviderUtils.class,
             dataProvider = "CreateJobAPIDataProvider")
     public void createJobAPITest(CreateJobPayload createJobPayload) {

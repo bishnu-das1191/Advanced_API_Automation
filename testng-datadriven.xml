@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<suite name="Advanced API Tests Suite">
+    <test name="In Warranty Flow - Data Driven Tests">
+        <classes>
+            <class name="com.api.tests.datadriven.LoginAPIDataDrivenTest"/>
+            <class name="com.api.tests.datadriven.CreateJobAPIDataDrivenTest"/>
+            <class name="com.api.tests.datadriven.CreateJobAPIFakeDataDrivenTest"/>
+        </classes>
+    </test>
+</suite>
