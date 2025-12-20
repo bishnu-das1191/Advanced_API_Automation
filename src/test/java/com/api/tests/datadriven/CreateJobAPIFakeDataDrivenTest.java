@@ -1,33 +1,25 @@
 package com.api.tests.datadriven;
 
-import com.api.constant.*;
-import com.api.request.model.*;
+import com.api.request.model.CreateJobPayload;
 import com.api.utils.SpecUtil;
 import io.restassured.module.jsv.JsonSchemaValidator;
-import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import static com.api.constant.Role.FD;
-import static com.api.utils.DateTimeUtil.getTimeWithDaysAgo;
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.startsWith;
 
-public class CreateJobAPIDataDrivenTest {
+public class CreateJobAPIFakeDataDrivenTest {
 
-    // here we are going to take the data from csv file
-
-
-
+    // to execute only faker data driven test case from maven command line filtering with group
+    //mvn test -Denv=qa -DsuiteXmlFile=testng-datadriven.xml -Dgroups=faker
 
     @Test(description = "Verify Create Job API Inwarranty Flow is working and response schema is valid",
-            groups = {"api","regression","datadriven", "csv"},
+            groups = {"api","regression","datadriven","faker"},
             dataProviderClass = com.dataproviders.DataProviderUtils.class,
-            dataProvider = "CreateJobAPIDataProvider")
-    public void createJobAPITest(CreateJobPayload createJobPayload) {
+            dataProvider = "CreateJobAPIFakerDataProvider")
+    public void createJobAPIWithFakeDataTest(CreateJobPayload createJobPayload) {
 
         // Implementation for creating a job via API
 

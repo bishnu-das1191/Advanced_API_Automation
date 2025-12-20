@@ -1,33 +1,34 @@
-package com.api.tests.datadriven;
+package com.api.tests;
 
-import com.api.constant.*;
 import com.api.request.model.*;
+import com.api.utils.FakerDataGenerator;
 import com.api.utils.SpecUtil;
 import io.restassured.module.jsv.JsonSchemaValidator;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import static com.api.constant.Role.FD;
-import static com.api.utils.DateTimeUtil.getTimeWithDaysAgo;
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.startsWith;
 
-public class CreateJobAPIDataDrivenTest {
+public class CreateJobAPITestWithFakerData {
 
-    // here we are going to take the data from csv file
+    private CreateJobPayload createJobPayload;
+    private final static String COUNTRY = "India";
 
 
+    @BeforeMethod(description = "Creating createJob api request payload.")
+    public void setup(){
+        // Any setup code if needed
+        // Data Setup using FakerDataGenerator utility class
+       createJobPayload = FakerDataGenerator.generateFakeCreateJobData();
+    }
 
 
     @Test(description = "Verify Create Job API Inwarranty Flow is working and response schema is valid",
-            groups = {"api","regression","datadriven", "csv"},
-            dataProviderClass = com.dataproviders.DataProviderUtils.class,
-            dataProvider = "CreateJobAPIDataProvider")
-    public void createJobAPITest(CreateJobPayload createJobPayload) {
+            groups = {"api","regression","smoke"})
+    public void createJobAPITest() {
 
         // Implementation for creating a job via API
 

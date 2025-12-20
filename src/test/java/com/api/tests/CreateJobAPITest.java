@@ -3,7 +3,6 @@ package com.api.tests;
 import com.api.constant.*;
 import com.api.request.model.*;
 import com.api.request.model.CustomerAddress;
-import com.api.utils.DateTimeUtil;
 import com.api.utils.SpecUtil;
 import io.restassured.module.jsv.JsonSchemaValidator;
 import org.testng.annotations.BeforeMethod;
