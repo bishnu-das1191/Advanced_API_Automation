@@ -1,63 +1,25 @@
-package com.api.tests;
+package com.api.tests.datadriven;
 
-import com.api.constant.*;
-import com.api.request.model.*;
-import com.api.request.model.CustomerAddress_OLD_POJO;
+import com.api.request.model.CreateJobPayload;
 import com.api.utils.SpecUtil;
 import io.restassured.module.jsv.JsonSchemaValidator;
-import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import static com.api.constant.Role.FD;
-import static com.api.utils.DateTimeUtil.getTimeWithDaysAgo;
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.startsWith;
 
-public class CreateJobAPITest {
+public class CreateJobAPIJsonDataDrivenTest {
 
-    private CreateJobPayload createJobPayload;
+    // execute this test with json data driven
+    //mvn test -Denv=qa -DsuiteXmlFile=testng-datadriven.xml -Dgroups=faker
 
-    @BeforeMethod(description = "Creating createJob api request payload.")
-    public void setup(){
-        // Any setup code if needed
-        // Data Setup
-        Customer customer = new Customer("Bishnu", "Das", "1234567890", "", "somit.gate@gmail.com", "");
-
-        // this is how we get email id from record class
-        System.out.println(customer.email_id());
-
-        CustomerAddress customerAddress = new CustomerAddress(
-                "flat no 123","apartment name","street name",
-                "near landmark","area name","412101",
-                "India","Maharashtra"
-        );
-
-        CustomerProduct customerProduct = new CustomerProduct(
-                getTimeWithDaysAgo(10),
-                "5444598687484620",
-                "5444598687484620",
-                "5444598687484620",
-                getTimeWithDaysAgo(10),
-                Product.NEXUS_2.getCode(),
-                Model.NEXUS_2_BLUE.getCode()
-        );
-
-        Problems problem1 = new Problems(Problem.SMARTPHONE_IS_RUNNING_SLOW.getCode(), "battery issue");
-        List<Problems> problemsList = new ArrayList<>();
-        problemsList.add(problem1);
-
-        createJobPayload = new CreateJobPayload(
-                ServiceLocation.SERVICE_LOCATION_A.getCode(), Platform.FRONT_DESK.getCode(), Warranty_Status.IN_WARRANTY.getCode(), OEM.GOOGLE.getCode(),
-                customer,customerAddress,customerProduct, problemsList);
-    }
-
-
-    @Test(description = "Verify Create Job API Inwarranty Flow is working and response schema is valid", groups = {"api","regression","smoke"})
-    public void createJobAPITest() {
+    @Test(description = "Verify Create Job API Inwarranty Flow is working and response schema is valid with JSON Data Driven",
+            groups = {"api","regression","datadriven"},
+            dataProviderClass = com.dataproviders.DataProviderUtils.class,
+            dataProvider = "CreateJobAPIJsonDataProvider")
+    public void createJobAPIWithJsonDataTest(CreateJobPayload createJobPayload) {
 
         // Implementation for creating a job via API
 
