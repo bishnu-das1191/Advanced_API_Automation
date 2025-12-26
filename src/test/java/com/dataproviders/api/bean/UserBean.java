@@ -1,10 +1,19 @@
 package com.dataproviders.api.bean;
 
+import com.opencsv.bean.CsvBindByName;
+import com.poiji.annotation.ExcelCellName;
+
 public class UserBean {
 
     //if we are changing the column names in CSV file then
     // we need to use @CsvBindByName annotation to map the column names to the fields
+
+    @CsvBindByName(column = "username")
+    @ExcelCellName("username")
     private String username;
+
+    @CsvBindByName(column = "password")
+    @ExcelCellName("password")
     private String password;
 
     public UserBean() {

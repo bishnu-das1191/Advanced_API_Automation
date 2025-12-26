@@ -1,6 +1,7 @@
 package com.api.tests.datadriven;
 
 import com.api.request.model.UserCredentials;
+import com.dataproviders.api.bean.UserBean;
 import org.testng.annotations.Test;
 
 import static com.api.utils.SpecUtil.requestSpec;
@@ -16,12 +17,12 @@ public class LoginAPIExcelDataDrivenTest {
             groups = {"api","regression","datadriven"},
             dataProviderClass = com.dataproviders.DataProviderUtils.class,
             dataProvider = "LoginAPIExcelDataProvider")
-    public void testLoginAPIwithExcel(UserCredentials userCredentials) {
+    public void testLoginAPIwithExcel(UserBean userBean) {
 
 
         //setup
         given()
-                .spec(requestSpec(userCredentials))
+                .spec(requestSpec(userBean))
                 // action
                 .when()
                     .post("login")
