@@ -16,13 +16,13 @@ public class ExcelReaderUtil {
         // private constructor to prevent instantiation
     }
 
-    public static <T> Iterator<T> loadTestData(String sheetName, Class<T> clazz) {
+    public static <T> Iterator<T> loadTestData(String filePath, String sheetName, Class<T> clazz) {
 
         // Read Excel file using Apache POI OOXML Library
 
         InputStream inputStream = Thread.currentThread()
                 .getContextClassLoader()
-                .getResourceAsStream("testdata/PhoenixTestData.xlsx");
+                .getResourceAsStream(filePath);
 
         XSSFWorkbook workbook = null;
         try {
