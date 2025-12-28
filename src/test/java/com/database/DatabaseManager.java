@@ -1,6 +1,8 @@
 package com.database;
 
 import com.api.utils.ConfigManager;
+import com.zaxxer.hikari.HikariConfig;
+import com.zaxxer.hikari.HikariDataSource;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -12,9 +14,17 @@ public class DatabaseManager {
     private static final String DB_USERNAME = ConfigManager.getProperty("DB_USER_NAME");
     private static final String DB_PASSWORD = ConfigManager.getProperty("DB_PASSWORD");
 
-    // Any update that happens to this connection variable, all the Threads will be aware of it.
-    // when we have requirement of multiple threads accessing and updating the same variable then we should use volatile keyword
-    private volatile static Connection connection;
+    private static final int MAXIMUM_POOL_SIZE = Integer.parseInt(ConfigManager.getProperty("MAXIMUM_POOL_SIZE"));
+    private static final int MINIMUM_IDLE_CONNECTIONS = Integer.parseInt(ConfigManager.getProperty("MINIMUM_IDLE_CONNECTIONS"));
+    private static final int CONNECTION_TIMEOUT_IN_SECS = Integer.parseInt(ConfigManager.getProperty("CONNECTION_TIMEOUT_IN_SECS"));
+    private static final int IDLE_TIMEOUT_IN_SECS = Integer.parseInt(ConfigManager.getProperty("IDLE_TIMEOUT_IN_SECS"));
+    private static final int MAX_LIFETIME_IN_MINS = Integer.parseInt(ConfigManager.getProperty("MAX_LIFETIME_IN_MINS"));
+    private static final String HIKARICP_POOL_NAME = ConfigManager.getProperty("HIKARICP_POOL_NAME");
+
+
+    private static HikariConfig hikariConfig;
+    private volatile static HikariDataSource hikariDataSource;
+    private static Connection connection;
 
     private DatabaseManager() {
         // private constructor to prevent instantiation
@@ -32,7 +42,7 @@ public class DatabaseManager {
         }
     }*/
 
-    public static void createConnection() throws SQLException {
+    private static void initializePool() {
 
         // Double-checking locking Design Pattern :-
         // This will improve the performance as well as thread safety
@@ -46,21 +56,39 @@ public class DatabaseManager {
         // This will reduce the overhead of synchronization
 
 
-        if(connection == null ) { // First check where all the parallel threads will come here
+        if(hikariDataSource == null ) { // First check where all the parallel threads will come here
             synchronized (DatabaseManager.class) {
-                if(connection == null) {
-                    connection = DriverManager.getConnection(DB_URL, DB_USERNAME, DB_PASSWORD);
-                    System.out.println("Connection established successfully: " + !connection.isClosed());
+                if(hikariDataSource == null) {
+
+                    HikariConfig hikariConfig = new HikariConfig();
+                    hikariConfig.setJdbcUrl(ConfigManager.getProperty("DB_URL"));
+                    hikariConfig.setUsername(ConfigManager.getProperty("DB_USER_NAME"));
+                    hikariConfig.setPassword(ConfigManager.getProperty("DB_PASSWORD"));
+                    // one of the major benefit of HikariCP is we can set the maximum pool size
+                    hikariConfig.setMaximumPoolSize(MAXIMUM_POOL_SIZE); // set max 10 connections in the pool, meaning at max 10 connections can be created in the pool
+                    hikariConfig.setMinimumIdle(MINIMUM_IDLE_CONNECTIONS); // set min 2 idle connections in the pool, meaning even if there are no requests, 2 connections will be kept alive
+                    hikariConfig.setConnectionTimeout(CONNECTION_TIMEOUT_IN_SECS * 1000); //set connection timeout to 10 seconds, meaning if a connection is not available in the pool within 10 seconds then it will throw an exception
+                    hikariConfig.setIdleTimeout(IDLE_TIMEOUT_IN_SECS * 1000); // set idle timeout to 10 seconds, meaning if a connection is idle for 10 seconds it will be removed from the pool
+                    hikariConfig.setMaxLifetime(MAX_LIFETIME_IN_MINS * 60 * 1000); // set max lifetime to 30 minutes, meaning after 30 minutes the connection will be removed from the pool
+                    hikariConfig.setPoolName(HIKARICP_POOL_NAME);
+
+                    hikariDataSource = new HikariDataSource(hikariConfig);
+
                 }
             }
         }
+    }
 
-        // what was the problem in earlier code without double checked locking in detail?
-        // Ans : In the earlier code without double-checked locking, every time a thread called the createConnection() method,
-        // it had to wait for the synchronized block to be free, even if the connection was already established.
-        // This created a bottleneck, especially when multiple threads were trying to access the method simultaneously.
-        // With double-checked locking, the first check outside the synchronized block allows threads to quickly determine
-        // if the connection is already established. If it is, they can proceed without waiting.
+    public static Connection getConnection() throws SQLException {
+        Connection connection = null;
+        if (hikariDataSource == null) {
+            initializePool();
+        } else if (hikariDataSource.isClosed()) {
+            throw new SQLException("HIKARI DATA SOURCE IS CLOSED");
+        }
 
+        connection = hikariDataSource.getConnection();
+
+        return connection;
     }
 }
