@@ -3,6 +3,7 @@ package com.dataproviders;
 import com.api.request.model.CreateJobPayload;
 import com.api.request.model.UserCredentials;
 import com.api.utils.*;
+import com.database.dao.CreateJobPayloadDataDao;
 import com.dataproviders.api.bean.CreateJobBean;
 import com.dataproviders.api.bean.UserBean;
 import org.testng.annotations.DataProvider;
@@ -87,6 +88,20 @@ public class DataProviderUtils {
             tempBean = iterator.next();
             tempPayload = CreateJobBeanMapper.mapper(tempBean);
             payloadList.add(tempPayload);
+        }
+
+        return payloadList.iterator();
+    }
+
+
+    @DataProvider(name = "CreateJobAPIDBDataProvider", parallel = true)
+    public static Iterator<CreateJobPayload> createJobAPIDBDataProvider() {
+
+        List<CreateJobBean> beanList = CreateJobPayloadDataDao.getCreateJobPayloadData();
+        List<CreateJobPayload> payloadList = new ArrayList<>();
+        for (CreateJobBean createJobBean : beanList) {
+            CreateJobPayload payload = CreateJobBeanMapper.mapper(createJobBean);
+            payloadList.add(payload);
         }
 
         return payloadList.iterator();
