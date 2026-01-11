@@ -3,14 +3,8 @@ package com.api.tests;
 import com.api.constant.*;
 import com.api.request.model.*;
 import com.api.utils.SpecUtil;
-import com.database.dao.CustomerAddressDAO;
-import com.database.dao.CustomerDAO;
-import com.database.dao.CustomerProductDAO;
-import com.database.dao.JobHeadDAO;
-import com.database.model.CustomerAddressDBModel;
-import com.database.model.CustomerDBModel;
-import com.database.model.CustomerProductDBModel;
-import com.database.model.JobHeadModel;
+import com.database.dao.*;
+import com.database.model.*;
 import io.restassured.module.jsv.JsonSchemaValidator;
 import io.restassured.response.Response;
 import io.restassured.specification.ResponseSpecification;
@@ -51,9 +45,9 @@ public class CreateJobAPIWithDBValidationTest {
 
         customerProduct = new CustomerProduct(
                 getTimeWithDaysAgo(10),
-                "5450598687484624",
-                "5450598687484624",
-                "5450598687484624",
+                "5450598687484124",
+                "5450598687484124",
+                "5450598687484124",
                 getTimeWithDaysAgo(10),
                 Product.NEXUS_2.getCode(),
                 Model.NEXUS_2_BLUE.getCode()
@@ -176,5 +170,11 @@ public class CreateJobAPIWithDBValidationTest {
         Assert.assertEquals(jobHeadDataFromDB.getMst_platform_id(), createJobPayload.mst_platform_id());
         Assert.assertEquals(jobHeadDataFromDB.getMst_service_location_id(), createJobPayload.mst_service_location_id());
         Assert.assertEquals(jobHeadDataFromDB.getMst_warrenty_status_id(), createJobPayload.mst_warrenty_status_id());
+
+        // Further Job Problem DB validations
+        int tr_job_head_id = response.then().extract().body().jsonPath().getInt("data.id");
+        MapJobProblemModel jobDataFromDB = MapJobProblemDAO.getProblemDetails(tr_job_head_id);
+        Assert.assertEquals(jobDataFromDB.getMst_problem_id(), createJobPayload.problems().get(0).id());
+        Assert.assertEquals(jobDataFromDB.getRemark(), createJobPayload.problems().get(0).remark());
     }
 }
