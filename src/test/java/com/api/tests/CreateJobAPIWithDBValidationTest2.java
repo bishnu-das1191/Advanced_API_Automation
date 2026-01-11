@@ -7,9 +7,11 @@ import com.api.utils.SpecUtil;
 import com.database.dao.CustomerAddressDAO;
 import com.database.dao.CustomerDAO;
 import com.database.dao.CustomerProductDAO;
+import com.database.dao.JobHeadDAO;
 import com.database.model.CustomerAddressDBModel;
 import com.database.model.CustomerDBModel;
 import com.database.model.CustomerProductDBModel;
+import com.database.model.JobHeadModel;
 import io.restassured.module.jsv.JsonSchemaValidator;
 import io.restassured.response.Response;
 import org.testng.Assert;
@@ -49,9 +51,9 @@ public class CreateJobAPIWithDBValidationTest2 {
 
         customerProduct = new CustomerProduct(
                 getTimeWithDaysAgo(10),
-                "5449598687484624",
-                "5449598687484624",
-                "5449598687484624",
+                "5449698687484624",
+                "5449698687484624",
+                "5449698687484624",
                 getTimeWithDaysAgo(10),
                 Product.NEXUS_2.getCode(),
                 Model.NEXUS_2_BLUE.getCode()
@@ -173,6 +175,13 @@ public class CreateJobAPIWithDBValidationTest2 {
         Assert.assertEquals(customerProductDBModel.getDop(), customerProduct.dop().substring(0,10));
         Assert.assertEquals(customerProductDBModel.getPopurl(), customerProduct.popurl());
         Assert.assertEquals(customerProductDBModel.getMst_model_id(), customerProduct.mst_model_id());
+
+        // Further DB validations for job head
+        JobHeadModel jobHeadDataFromDB = JobHeadDAO.getJobHeadData(customerId);
+        Assert.assertEquals(jobHeadDataFromDB.getMst_oem_id(), createJobPayload.mst_oem_id());
+        Assert.assertEquals(jobHeadDataFromDB.getMst_platform_id(), createJobPayload.mst_platform_id());
+        Assert.assertEquals(jobHeadDataFromDB.getMst_service_location_id(), createJobPayload.mst_service_location_id());
+        Assert.assertEquals(jobHeadDataFromDB.getMst_warrenty_status_id(), createJobPayload.mst_warrenty_status_id());
 
 
     }

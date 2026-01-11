@@ -4,6 +4,7 @@ import com.api.request.model.Customer;
 import com.database.model.CustomerAddressDBModel;
 import com.database.model.CustomerDBModel;
 import com.database.model.CustomerProductDBModel;
+import com.database.model.JobHeadModel;
 
 import java.sql.SQLException;
 
@@ -30,7 +31,11 @@ public class DemoDaoRunnner {
 //        System.out.println(customerAddressDBModel);
 
         // Fetching Customer Product Data
-        CustomerProductDBModel customerProductDBModel = CustomerProductDAO.getProductInfoFromDB(152131);
-        System.out.println(customerProductDBModel);
+        /*CustomerProductDBModel customerProductDBModel = CustomerProductDAO.getProductInfoFromDB(152131);
+        System.out.println(customerProductDBModel);*/
+
+        // Fetching Job Head Data
+        JobHeadModel jobHeadModel= JobHeadDAO.getJobHeadData(152165);
+        System.out.println(jobHeadModel);
     }
 }

@@ -5,8 +5,10 @@ import com.api.utils.FakerDataGenerator;
 import com.api.utils.SpecUtil;
 import com.database.dao.CustomerAddressDAO;
 import com.database.dao.CustomerDAO;
+import com.database.dao.JobHeadDAO;
 import com.database.model.CustomerAddressDBModel;
 import com.database.model.CustomerDBModel;
+import com.database.model.JobHeadModel;
 import io.restassured.module.jsv.JsonSchemaValidator;
 import org.checkerframework.checker.units.qual.A;
 import org.testng.Assert;
@@ -118,6 +120,14 @@ public class CreateJobAPITestWithFakerData {
         Assert.assertEquals(actualCustomerAddressInDB.getArea(), createJobPayload.customer_address().area());
         Assert.assertEquals(actualCustomerAddressInDB.getPincode(), createJobPayload.customer_address().pincode());
         Assert.assertEquals(actualCustomerAddressInDB.getCountry(), createJobPayload.customer_address().country());
+
+
+        // Further DB validations for job head
+        JobHeadModel jobHeadDataFromDB = JobHeadDAO.getJobHeadData(customerId);
+        Assert.assertEquals(jobHeadDataFromDB.getMst_oem_id(), createJobPayload.mst_oem_id());
+        Assert.assertEquals(jobHeadDataFromDB.getMst_platform_id(), createJobPayload.mst_platform_id());
+        Assert.assertEquals(jobHeadDataFromDB.getMst_service_location_id(), createJobPayload.mst_service_location_id());
+        Assert.assertEquals(jobHeadDataFromDB.getMst_warrenty_status_id(), createJobPayload.mst_warrenty_status_id());
 
 
 
