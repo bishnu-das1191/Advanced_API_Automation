@@ -7,7 +7,6 @@ import com.api.utils.SpecUtil;
 import com.database.dao.*;
 import com.database.model.*;
 import io.restassured.module.jsv.JsonSchemaValidator;
-import io.restassured.response.Response;
 import org.testng.Assert;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
@@ -21,7 +20,7 @@ import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.startsWith;
 
-public class CreateJobAPIWithDBValidationTest2 {
+public class CreateJobAPIWithDBValidationWithResponseModelTest {
 
     private CreateJobPayload createJobPayload;
     private Customer customer;
