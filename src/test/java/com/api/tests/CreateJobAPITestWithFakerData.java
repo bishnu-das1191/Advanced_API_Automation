@@ -3,7 +3,15 @@ package com.api.tests;
 import com.api.request.model.*;
 import com.api.utils.FakerDataGenerator;
 import com.api.utils.SpecUtil;
+import com.database.dao.CustomerAddressDAO;
+import com.database.dao.CustomerDAO;
+import com.database.dao.JobHeadDAO;
+import com.database.model.CustomerAddressDBModel;
+import com.database.model.CustomerDBModel;
+import com.database.model.JobHeadModel;
 import io.restassured.module.jsv.JsonSchemaValidator;
+import org.checkerframework.checker.units.qual.A;
+import org.testng.Assert;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
@@ -32,7 +40,7 @@ public class CreateJobAPITestWithFakerData {
 
         // Implementation for creating a job via API
 
-        given()
+        int customerId = given()
                 .spec(SpecUtil.requestSpecWithAuth(FD, createJobPayload))
                  // we are using Text Block feature of Java 15
                 // to create multi line JSON String here below
@@ -86,7 +94,41 @@ public class CreateJobAPITestWithFakerData {
                 .body(JsonSchemaValidator.matchesJsonSchemaInClasspath("response-schema/CreateJobAPIResponseSchema.json"))
                 .body("message", equalTo("Job created successfully. "))
                 .body("data.mst_service_location_id", equalTo(1))
-                .body("data.job_number", startsWith("JOB_"));
+                .body("data.job_number", startsWith("JOB_"))
+                .extract().body().jsonPath().getInt("data.tr_customer_id");
+
+                // DB Validations are added here using the extracted customerId if needed
+        // Validate customer data in DB
+        Customer expectedCustomerData = createJobPayload.customer();
+        CustomerDBModel actualCustomerDataInDB = CustomerDAO.getCustomerInfo(customerId);
+
+        Assert.assertEquals(actualCustomerDataInDB.getFirst_name(), expectedCustomerData.first_name());
+        Assert.assertEquals(actualCustomerDataInDB.getLast_name(), expectedCustomerData.last_name());
+        Assert.assertEquals(actualCustomerDataInDB.getMobile_number(), expectedCustomerData.mobile_number());
+        Assert.assertEquals(actualCustomerDataInDB.getEmail_id(), expectedCustomerData.email_id());
+        Assert.assertEquals(actualCustomerDataInDB.getEmail_id_alt(), expectedCustomerData.email_id_alt());
+        Assert.assertEquals(actualCustomerDataInDB.getMobile_number_alt(), expectedCustomerData.mobile_number_alt());
+
+        // Customer address DB validations
+        CustomerAddressDBModel actualCustomerAddressInDB = CustomerAddressDAO
+                .getCustomerAddressBData(actualCustomerDataInDB.getTr_customer_address_id());
+
+        Assert.assertEquals(actualCustomerAddressInDB.getFlat_number(), createJobPayload.customer_address().flat_number());
+        Assert.assertEquals(actualCustomerAddressInDB.getApartment_name(), createJobPayload.customer_address().apartment_name());
+        Assert.assertEquals(actualCustomerAddressInDB.getStreet_name(), createJobPayload.customer_address().street_name());
+        Assert.assertEquals(actualCustomerAddressInDB.getLandmark(), createJobPayload.customer_address().landmark());
+        Assert.assertEquals(actualCustomerAddressInDB.getArea(), createJobPayload.customer_address().area());
+        Assert.assertEquals(actualCustomerAddressInDB.getPincode(), createJobPayload.customer_address().pincode());
+        Assert.assertEquals(actualCustomerAddressInDB.getCountry(), createJobPayload.customer_address().country());
+
+
+        // Further DB validations for job head
+        JobHeadModel jobHeadDataFromDB = JobHeadDAO.getJobHeadData(customerId);
+        Assert.assertEquals(jobHeadDataFromDB.getMst_oem_id(), createJobPayload.mst_oem_id());
+        Assert.assertEquals(jobHeadDataFromDB.getMst_platform_id(), createJobPayload.mst_platform_id());
+        Assert.assertEquals(jobHeadDataFromDB.getMst_service_location_id(), createJobPayload.mst_service_location_id());
+        Assert.assertEquals(jobHeadDataFromDB.getMst_warrenty_status_id(), createJobPayload.mst_warrenty_status_id());
+
 
 
     }

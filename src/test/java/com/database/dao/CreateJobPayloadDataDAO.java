@@ -10,7 +10,11 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CreateJobPayloadDataDao {
+public class CreateJobPayloadDataDAO {
+
+    private CreateJobPayloadDataDAO() {
+        // private constructor to prevent instantiation
+    }
 
     private  static final String SQL_QUERY =
                 """
